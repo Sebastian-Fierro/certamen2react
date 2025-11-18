@@ -26,6 +26,15 @@ export function Mesa() {
     const palo = paloInput;
     if (!numero) return alert("Ingrese el número de la carta.");
 
+    // Validar que no existan más de 2 cartas con mismo número y mismo palo
+    const iguales = jugadaCarioca.filter(
+      (c) => c.numero.toString() === numero && c.palo === palo
+    ).length;
+    if (iguales >= 2) {
+      setEvaluacion("No se pueden tener más de 2 cartas con el mismo número y palo");
+      return;
+    }
+
     const nueva = { id: nextId, numero, palo };
     setJugada((prev) => [...prev, nueva]);
     setNextId((v) => v + 1);
@@ -37,6 +46,19 @@ export function Mesa() {
     // Validación mínima: deben ser 12 cartas
     if (jugadaCarioca.length < 12) {
       setEvaluacion("La jugada no es válida: menos de 12 cartas");
+      return false;
+    }
+
+    // Validar que no existan más de 2 cartas iguales (mismo número y mismo palo)
+    const dupCounts = {};
+    let tieneTriplesIguales = false;
+    jugadaCarioca.forEach((c) => {
+      const key = `${c.numero}::${c.palo}`;
+      dupCounts[key] = (dupCounts[key] || 0) + 1;
+      if (dupCounts[key] > 2) tieneTriplesIguales = true;
+    });
+    if (tieneTriplesIguales) {
+      setEvaluacion("La jugada no es válida: hay más de 2 cartas con el mismo número y palo");
       return false;
     }
 
@@ -154,11 +176,21 @@ export function Mesa() {
           </AnimatePresence>
         </div>
         <div className="text-center mt-3">
-          {evaluacion && (
-            <div className="alert alert-info" role="alert">
-              {evaluacion}
-            </div>
-          )}
+          <AnimatePresence>
+            {evaluacion && (
+              <motion.div
+                key={evaluacion}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="alert alert-info" role="alert">
+                  {evaluacion}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div>
             <strong>Cartas en mesa:</strong> {jugadaCarioca.length}
           </div>
