@@ -45,7 +45,7 @@ export function Mesa() {
   const evaluarCuatroTrios = () => {
     // Validación mínima: deben ser 12 cartas
     if (jugadaCarioca.length < 12) {
-      setEvaluacion("La jugada no es válida: menos de 12 cartas");
+      setEvaluacion("NO FORMA JUEGO :C (menos de 12 cartas)");
       return false;
     }
 

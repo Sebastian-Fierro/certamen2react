@@ -15,7 +15,7 @@ export function Carta({ cartaprops, funcionEnviada }) {
     >
       <div className="card-header header-eliminar">
         <button className="btn btn-danger btn-sm" onClick={funcionEnviada}>
-          <i className="bi bi-trash"></i>
+          X
         </button>
       </div>
 
